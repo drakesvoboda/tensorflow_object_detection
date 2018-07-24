@@ -4,7 +4,7 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 import numpy
 from numpy.random import shuffle
-
+from subprocess import call
 
 def xml_to_csv(file_list):
     xml_list = []
@@ -39,9 +39,9 @@ def main():
     base_path = './road_damage_dataset/'
     govs =  ["Adachi/", "Chiba/", "Ichihara/", "Muroran/", "Nagakute/", "Numazu/", "Sumida/"]
 
-    train_ratio = .9
+    train_ratio = .95
     valid_ratio = .05
-    test_ratio = .05
+    test_ratio = 0
 
     file_list = []
     for gov in govs:
@@ -63,6 +63,10 @@ def main():
         xml_df = xml_to_csv(files)
         xml_df.to_csv(os.path.join(base_path, (name + '_labels.csv')), index=None)
         print('Successfully converted xml to csv.')
+        print('Now creating .record file')
+        call(("python generate_tfrecord.py " +
+        "--csv_input=%s " +
+        "--output_path=%s") % (os.path.join(base_path, (name + '_labels.csv')), os.path.join(base_path, (name + '.record'))))
 
-
-main()
+if __name__ == '__main__':
+    main()

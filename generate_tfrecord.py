@@ -2,10 +2,9 @@
 Usage:
   # From tensorflow/models/
   # Create train data:
-  python generate_tfrecord.py --csv_input=train_labels.csv --base_path=./road_damage_dataset --output_path=train.record
-
+  python generate_tfrecord.py --csv_input=data/train_labels.csv  --output_path=train.record
   # Create test data:
-  python generate_tfrecord.py --csv_input=test_labels.csv --base_path=./road_damage_dataset --output_path=test.record
+  python generate_tfrecord.py --csv_input=data/test_labels.csv  --output_path=test.record
 """
 from __future__ import division
 from __future__ import print_function
@@ -22,7 +21,6 @@ from collections import namedtuple, OrderedDict
 
 flags = tf.app.flags
 flags.DEFINE_string('csv_input', '', 'Path to the CSV input')
-flags.DEFINE_string('base_path', '', 'Data folder')
 flags.DEFINE_string('output_path', '', 'Path to output TFRecord')
 FLAGS = flags.FLAGS
 
@@ -40,15 +38,14 @@ def class_text_to_int(row_label):
     else : None
 
 
-
 def split(df, group):
     data = namedtuple('data', ['filename', 'object'])
     gb = df.groupby(group)
     return [data(filename, gb.get_group(x)) for filename, x in zip(gb.groups.keys(), gb.groups)]
 
 
-def create_tf_example(group, base_path):
-    with tf.gfile.GFile(os.path.join(base_path, group.filename), 'rb') as fid:
+def create_tf_example(group, path):
+    with tf.gfile.GFile(os.path.join(path, '{}'.format(group.filename)), 'rb') as fid:
         encoded_jpg = fid.read()
     encoded_jpg_io = io.BytesIO(encoded_jpg)
     image = Image.open(encoded_jpg_io)
@@ -90,11 +87,11 @@ def create_tf_example(group, base_path):
 
 def main(_):
     writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
-    base_path = FLAGS.base_path;
+    path = os.path.join(os.getcwd(), 'road_damage_dataset')
     examples = pd.read_csv(FLAGS.csv_input)
     grouped = split(examples, 'filename')
     for group in grouped:
-        tf_example = create_tf_example(group, base_path)
+        tf_example = create_tf_example(group, path)
         writer.write(tf_example.SerializeToString())
 
     writer.close()

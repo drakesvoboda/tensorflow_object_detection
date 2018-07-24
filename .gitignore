@@ -1,3 +1,6 @@
 road_damage_dataset/
 .vs/
 images/
+eval_dir/
+train_dir/
+pretrained_models/
