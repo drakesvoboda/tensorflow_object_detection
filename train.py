@@ -5,7 +5,7 @@ def main():
     dir = os.getcwd()
     
     RESEARCH_LIBRARY_PATH='C:/tensorflow/models/research'
-    PIPELINE_CONFIG_PATH=os.path.join(dir, 'training/faster_rcnn_inception_v2_pets.config')
+    PIPELINE_CONFIG_PATH=os.path.join(dir, 'models/model/faster_rcnn_inception_v2_pets.config')
     MODEL_DIR=os.path.join(dir, 'train_dir')
     EVAL_DIR=os.path.join(dir, 'eval_dir')
     

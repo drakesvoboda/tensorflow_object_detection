@@ -5,9 +5,8 @@ def main():
     dir = os.getcwd()
     
     RESEARCH_LIBRARY_PATH='C:/tensorflow/models/research'
-    PIPELINE_CONFIG_PATH=os.path.join(dir, 'training/faster_rcnn_inception_v2_pets.config')
-    MODEL_DIR=os.path.join(dir, 'train_dir')
-    EVAL_DIR=os.path.join(dir, 'eval_dir')
+    PIPELINE_CONFIG_PATH=os.path.join(dir, 'models/model/faster_rcnn_inception_v2_pets.config')
+    MODEL_DIR=os.path.join(dir, 'test_model')
     
     os.chdir(RESEARCH_LIBRARY_PATH)
 
@@ -16,9 +15,9 @@ def main():
     call(("python object_detection/model_main.py " +
     "--pipeline_config_path=%s " +
     "--modal_dir=%s " +
-    "--logtostderr") % (PIPELINE_CONFIG_PATH, MODEL_DIR))
+    "--num_train_steps=50000 " +
+    "--num_eval_steps=2000 " +
+    "--alsologtostderr") % (PIPELINE_CONFIG_PATH, MODEL_DIR))
     
-
-
 if __name__ == '__main__':
     main()
