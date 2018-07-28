@@ -415,5 +415,3 @@ This error occurs when the filepaths in the training configuration file (faster_
 ```
 “C:/path/to/model.file”
 ```
-#   t e n s o r f l o w _ o b j e c t _ d e t e c t i o n  
- 
